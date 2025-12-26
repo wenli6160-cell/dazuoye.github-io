@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MV 播放 - Mojito</title>
+    <!-- 引入 Font Awesome 图标 -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <style>
+        /* 基础变量 - 继承深色主题 */
+        :root {
+            --p: #D8AF71; /* 主题色：复古金 */
+            --s: #4A536B; /* 辅助色：深黛青/墨绿 */
+            --d: #0A0A0E; /* 深色背景：更深的黑灰 */
+            --dg: #1C1C23; /* 深灰背景 */
+            --lg: #32323A; /* 浅灰背景 */
+            --tl: #FFFFFF; /* 亮文本：纯白 */
+            --tg: #B0B0B0; /* 灰文本 */
+            --at: all 0.3s ease; /* 动画时间 */
+            --font-family: 'Inter', sans-serif;
+        }
+
+        /* 基础重置和背景设置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            min-height: 100vh;
+            font-family: var(--font-family);
+            background-color: var(--d);
+            color: var(--tl);
+            line-height: 1.6;
+        }
+
+        /* 布局容器 */
+        .ye-mian-rong-qi {
+            width: 95%;
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 20px;
+            display: flex;
+            gap: 30px; /* 间距 */
+        }
+
+        /* 主视频区域 (占据大部分空间) */
+        .zhu-nei-rong {
+            flex-grow: 1;
+            flex-basis: 70%; /* 在大屏幕上占据 70% */
+        }
+
+        /* 视频播放器容器 */
+        .shi-pin-bo-fang-qi {
+            background-color: var(--dg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            /* 响应式视频比例 (16:9) */
+            position: relative;
+            padding-top: 56.25%; /* (9 / 16) * 100% */
+            margin-bottom: 20px;
+        }
+
+        /* 统一设置 iframe 和 video 标签，确保它们充满父容器 */
+        .shi-pin-bo-fang-qi iframe,
+        .shi-pin-bo-fang-qi video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: black;
+        }
+
+        /* 视频信息区 */
+        .shi-pin-xin-xi {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--s);
+            margin-bottom: 20px;
+        }
+
+        .shi-pin-xin-xi h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            color: var(--tl);
+        }
+
+        .shi-pin-xin-xi p {
+            font-size: 16px;
+            color: var(--tg);
+            margin-bottom: 10px;
+        }
+
+        .shu-ju-xiang {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--tg);
+        }
+        
+        .shu-ju-xiang span i {
+            margin-right: 5px;
+            color: var(--p);
+        }
+
+        /* 描述和互动按钮 */
+        .miao-shu-kuang {
+            background-color: var(--dg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--lg);
+        }
+        
+        .miao-shu-kuang h3 {
+            color: var(--p);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .cao-zuo-an-niu-quan {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cao-zuo-an-niu {
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--at);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--lg);
+            background-color: var(--lg);
+        }
+
+        .cao-zuo-an-niu:hover {
+            background-color: var(--s);
+            color: var(--tl);
+        }
+
+        .cao-zuo-an-niu.zhu-yao {
+            background-color: var(--p);
+            color: var(--d);
+            border-color: var(--p);
+        }
+        
+        .cao-zuo-an-niu.zhu-yao:hover {
+            background-color: #F0C489;
+            box-shadow: 0 2px 10px rgba(216, 175, 113, 0.4);
+        }
+
+        /* 侧边栏 (相关推荐) */
+        .ce-bian-lan {
+            flex-basis: 30%; /* 在大屏幕上占据 30% */
+            min-width: 300px; /* 最小宽度限制 */
+        }
+
+        .ce-bian-lan h2 {
+            font-size: 20px;
+            color: var(--tl);
+            border-left: 4px solid var(--p);
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* 相关 MV 列表项 */
+        .xiang-guan-mv-xiang {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: var(--dg);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--at);
+            border: 1px solid transparent;
+        }
+
+        .xiang-guan-mv-xiang:hover {
+            background-color: var(--lg);
+            border-color: var(--p);
+        }
+
+        .suo-lue-tu {
+            width: 120px;
+            height: 67px; /* 16:9 比例 */
+            background-color: var(--s);
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--tg);
+            font-size: 12px;
+            border: 1px solid var(--s);
+        }
+
+        /* 新增：缩略图内图片样式 */
+        .suo-lue-tu img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 保持比例并填充容器 */
+            display: block; /* 去除图片底部空白 */
+        }
+
+        .mv-xiang-xi {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .mv-biao-ti {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--tl);
+            line-height: 1.3;
+        }
+
+        .mv-zuo-zhe {
+            font-size: 13px;
+            color: var(--tg);
+            margin-top: 4px;
+        }
+
+        /* 媒体查询：适配小屏幕 */
+        @media (max-width: 1024px) {
+            .ye-mian-rong-qi {
+                flex-direction: column;
+                padding: 15px;
+                gap: 20px;
+            }
+            
+            .ce-bian-lan {
+                min-width: 100%;
+            }
+
+            .zhu-nei-rong {
+                order: -1; /* 让视频在手机上位于顶部 */
+            }
+
+            .shi-pin-xin-xi h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+    <div class="ye-mian-rong-qi">
+
+        <!-- 主视频内容区 -->
+        <div class="zhu-nei-rong">
+            
+            <!-- 视频播放器 -->
+            <div class="shi-pin-bo-fang-qi">
+                <video controls autoplay muted loop 
+                    src="mojito.mp4" 
+                    poster="">
+                    您的浏览器不支持 HTML5 视频播放。
+                </video>
+            </div>
+
+            <!-- 视频信息 -->
+            <div class="shi-pin-xin-xi">
+                <h1>Mojito</h1>
+                <p>—— 周杰伦 (Jay Chou)</p>
+                
+                <div class="cao-zuo-an-niu-quan">
+                    <div class="cao-zuo-an-niu zhu-yao">
+                        <i class="fa fa-thumbs-up"></i> 赞 (1.5M)
+                    </div>
+                    <div class="cao-zuo-an-niu">
+                        <i class="fa fa-share-alt"></i> 分享
+                    </div>
+                    <div class="cao-zuo-an-niu">
+                        <i class="fa fa-plus"></i> 收藏
+                    </div>
+                </div>
+
+                <div class="shu-ju-xiang">
+                    <span><i class="fa fa-calendar"></i> 2020年6月12日</span>
+                    <span><i class="fa fa-eye"></i> 播放量: 88,888,888</span>
+                </div>
+            </div>
+
+            <!-- MV 描述 -->
+            <div class="miao-shu-kuang">
+                <h3>MV 简介</h3>
+                <p>
+                    周杰伦的《Mojito》MV 在古巴哈瓦那取景，充满浓郁的拉丁风情和复古气息。明快的节奏、轻快的曲调，描绘了在异国街头驾驶老爷车，享受夏日浪漫的轻松心情。该 MV 由周杰伦亲自执导，捕捉了古巴独特的人文景观和色彩。
+                </p>
+            </div>
+
+        </div>
+
+        <!-- 侧边栏：相关 MV 推荐 -->
+        <div class="ce-bian-lan">
+            <h2><i class="fa fa-list-ul"></i> 相关推荐</h2>
+            
+            <div class="xiang-guan-mv-lie-biao">
+                <!-- 推荐 MV 1 -->
+                <div class="xiang-guan-mv-xiang">
+                    <div class="suo-lue-tu">
+                        <img height=100%    width=100% src="19.png" alt="说好不哭 封面">
+                    </div>
+                    <div class="mv-xiang-xi">
+                        <div class="mv-biao-ti">说好不哭</div>
+                        <div class="mv-zuo-zhe">周杰伦 (Ft. 五月天阿信)</div>
+                    </div>
+                </div>
+
+                <!-- 推荐 MV 2 -->
+                <div class="xiang-guan-mv-xiang">
+                    <div class="suo-lue-tu">
+                        <img src="20.jpg" alt="等你下课 封面">
+                    </div>
+                    <div class="mv-xiang-xi">
+                        <div class="mv-biao-ti">等你下课</div>
+                        <div class="mv-zuo-zhe">周杰伦 (Ft. 杨瑞代)</div>
+                    </div>
+                </div>
+
+                <!-- 推荐 MV 3 -->
+                <div class="xiang-guan-mv-xiang">
+                    <div class="suo-lue-tu">
+                        <img src="22.png" alt="告白气球 封面">
+                    </div>
+                    <div class="mv-xiang-xi">
+                        <div class="mv-biao-ti">告白气球</div>
+                        <div class="mv-zuo-zhe">周杰伦</div>
+                    </div>
+                </div>
+                
+                <!-- 推荐 MV 4 -->
+                <div class="xiang-guan-mv-xiang">
+                    <div class="suo-lue-tu">
+                        <img src="13.png" alt="晴天 封面">
+                    </div>
+                    <div class="mv-xiang-xi"> 
+                        <div class="mv-biao-ti">晴天</div>
+                        <div class="mv-zuo-zhe">周杰伦</div>
+                    </div>
+                </div>
+                
+                <!-- 推荐 MV 5 -->
+                <div class="xiang-guan-mv-xiang">
+                    <div class="suo-lue-tu">
+                        <img height="50px"    width="30px" src="14.jpg" alt="稻香 封面">
+                    </div>
+                    <div class="mv-xiang-xi">
+                        <div class="mv-biao-ti">稻香</div>   
+                        <div class="mv-zuo-zhe">周杰伦</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

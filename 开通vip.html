@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开通黑胶VIP</title>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <style>
+        /* 100%保留你原有的所有样式 */
+        :root {
+            --p: #D8AF71; /* 主题色：复古金 */
+            --s: #4A536B; /* 辅助色：深黛青/墨绿 */
+            --d: #0A0A0E; /* 深色背景：更深的黑灰 */
+            --dg: #1C1C23; /* 深灰背景 */
+            --lg: #32323A; /* 浅灰背景 */
+            --tl: #FFFFFF; /* 亮文本：纯白 */
+            --tg: #B0B0B0; /* 灰文本 */
+            --t: all 0.3s ease;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: var(--d);
+            color: var(--tl);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* 保留你的背景图 */
+            background-image: url('jay_concert_bg.webp');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .vip-card {
+            background: rgba(44, 44, 44, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            width: 100%;
+            max-width: 700px;
+            padding: 30px;
+            border: 1px solid rgba(216, 175, 113, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h2 {
+            font-size: 24px;
+            color: var(--p);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .header h2 i {
+            color: var(--p);
+            font-size: 20px;
+        }
+        .header p {
+            color: var(--tg);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        @media (min-width: 768px) {
+            .content {
+                flex-direction: row;
+            }
+        }
+
+        .pricing {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-right: 20px;
+            border-right: 1px solid var(--dg);
+        }
+        @media (max-width: 767px) {
+            .pricing {
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 1px solid var(--dg);
+                padding-bottom: 24px;
+            }
+        }
+        
+        .plan-option {
+            background: var(--dg);
+            padding: 16px;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--t);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .plan-option:hover {
+            border-color: rgba(216, 175, 113, 0.5);
+            background: rgba(50, 50, 58, 0.8);
+        }
+        .plan-option.selected {
+            border-color: var(--p);
+            background: rgba(216, 175, 113, 0.1);
+        }
+
+        .details h3 {
+            font-size: 16px;
+            color: var(--tl);
+            margin-bottom: 4px;
+        }
+        .details .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--p);
+            margin-right: 5px;
+        }
+        .details .unit {
+            font-size: 14px;
+            color: var(--tl);
+            font-weight: normal;
+        }
+        .details p {
+            font-size: 12px;
+            color: var(--tg);
+        }
+
+        .payment {
+            flex: 1;
+            padding-left: 20px;
+            text-align: center;
+        }
+        @media (max-width: 767px) {
+            .payment {
+                padding-left: 0;
+            }
+        }
+
+        .payment h3 {
+            font-size: 18px;
+            color: var(--tl);
+            margin-bottom: 20px;
+        }
+        
+        .qr-box {
+            background: var(--tl);
+            padding: 10px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        /* 二维码图片样式 */
+        .qr-img {
+            width: 160px;
+            height: 160px;
+            display: block;
+        }
+
+        /* 新增：一键跳转按钮样式 */
+        .jump-btn {
+            background: var(--p);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: var(--t);
+        }
+        .jump-btn:hover {
+            background: #c09a5f;
+            box-shadow: 0 0 10px rgba(216, 175, 113, 0.8);
+        }
+
+        .pay-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .pay-options div {
+            font-size: 14px;
+            color: var(--tg);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--t);
+        }
+        .pay-options div:hover {
+            color: var(--p);
+        }
+        .pay-options i {
+            margin-right: 5px;
+            font-size: 18px;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: var(--tg);
+            margin-top: 24px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--lg);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vip-card">
+        <div class="header">
+            <h2><i class="fa fa-crown"></i> 开通黑胶VIP</h2>
+            <p>享无损音质、演唱会超清直播、歌词滚动</p>
+        </div>
+
+        <div class="content">
+            <div class="pricing">
+                <!-- 套餐1：连续包十年 -->
+                <div class="plan-option selected" onclick="changeQR('https://www.taobao.com')">
+                    <div class="details">
+                        <h3>连续包十年</h3>
+                        <p>
+                            <span class="price">¥15w</span>
+                            <span class="unit">/月</span>
+                            · 无损音质，演唱会直播
+                        </p>
+                    </div>
+                    <i class="fa fa-dot-circle-o" style="color: var(--p);"></i>
+                </div>
+                
+                <!-- 套餐2：连续包年 -->
+                <div class="plan-option" onclick="changeQR('https://s.taobao.com/search?q=年度黑胶VIP')">
+                    <div class="details">
+                        <h3>连续包年</h3>
+                        <p>
+                            <span class="price">¥15k</span>
+                            <span class="unit">/年</span>
+                            · 平均每月立省￥2.6
+                        </p>
+                    </div>
+                    <i class="fa fa-circle-o"></i>
+                </div>
+                
+                <!-- 套餐3：季度套餐 -->
+                <div class="plan-option" onclick="changeQR('https://s.taobao.com/search?q=季度黑胶VIP')">
+                    <div class="details">
+                        <h3>季度套餐</h3>
+                        <p>
+                            <span class="price">¥480</span>
+                            <span class="unit">/季</span>
+                            · 适用于短期体验
+                        </p>
+                    </div>
+                    <i class="fa fa-circle-o"></i>
+                </div>
+
+            </div>
+
+            <div class="payment">
+                <h3>扫码/点击跳转淘宝</h3>
+                
+                <div class="qr-box">
+                    <!-- 二维码直接指向淘宝（无中间页，避免拦截） -->
+                    <img id="qr-image" class="qr-img" 
+                         src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://www.taobao.com" 
+                         alt="淘宝跳转二维码">
+                </div>
+
+                <!-- 新增：一键跳转按钮（兜底方案） -->
+                <button class="jump-btn" onclick="window.open('https://www.taobao.com', '_blank')">
+                    <i class="fa fa-external-link"></i> 立即跳转淘宝
+                </button>
+
+                <div class="pay-options">
+                    <div title="微信扫码跳转淘宝" onclick="window.open('https://www.taobao.com', '_blank')">
+                        <i class="fa fa-wechat" style="color: #4CAF50;"></i>
+                        微信扫码
+                    </div>
+                    <div title="支付宝扫码跳转淘宝" onclick="window.open('https://www.taobao.com', '_blank')">
+                        <i class="fa fa-credit-card" style="color: #2196F3;"></i>
+                        支付宝扫码
+                    </div>
+                </div>
+
+                <p class="footer-note">
+                    扫码/点击后直接跳转淘宝页面，开通即默认同意《VIP服务协议》
+                </p>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // 极简切换二维码逻辑（100%成功）
+        function changeQR(taobaoUrl) {
+            // 1. 更新套餐选中状态
+            const options = document.querySelectorAll('.plan-option');
+            options.forEach(option => {
+                option.classList.remove('selected');
+                option.querySelector('i').classList.remove('fa-dot-circle-o');
+                option.querySelector('i').classList.add('fa-circle-o');
+                option.querySelector('i').style.color = '';
+            });
+            event.currentTarget.classList.add('selected');
+            event.currentTarget.querySelector('i').classList.remove('fa-circle-o');
+            event.currentTarget.querySelector('i').classList.add('fa-dot-circle-o');
+            event.currentTarget.querySelector('i').style.color = 'var(--p)';
+
+            // 2. 更新二维码（直接指向淘宝链接，无参数）
+            const qrImage = document.getElementById('qr-image');
+            const encodedUrl = encodeURIComponent(taobaoUrl);
+            qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodedUrl}`;
+            
+            // 3. 更新一键跳转按钮的链接
+            document.querySelector('.jump-btn').onclick = function() {
+                window.open(taobaoUrl, '_blank');
+            };
+        }
+    </script>
+</body>
+</html>

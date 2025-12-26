@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>周杰伦音乐站 - Jay Chou Music Hub</title>
+  <!-- 引入字体图标库 -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <style>
+    /* ==============================================
+       全局样式配置 - 周杰伦主题风格定义
+       主色调：复古金 #D8AF71 | 辅助色：深黛青 #4A536B
+       背景色：深空黑 #0A0A0E | 层级灰：#1C1C23 / #32323A
+      ============================================== */
+    :root {
+      /* 主题色：复古金（周杰伦专辑封面经典色调） */
+      --primary-color: #D8AF71; 
+      /* 辅助色：深黛青（中式复古搭配） */
+      --secondary-color: #4A536B; 
+      /* 深色背景：深空黑（沉浸式音乐氛围） */
+      --dark-bg: #0A0A0E; 
+      /* 深灰背景：卡片底色 */
+      --dark-gray: #1C1C23; 
+      /* 浅灰背景：hover/分割色 */
+      --light-gray: #32323A; 
+      /* 文本色：纯白/浅灰 */
+      --text-light: #FFFFFF; 
+      --text-gray: #B0B0B0; 
+      /* 通用动画时长 */
+      --transition-time: all 0.3s ease;
+    }
+    
+    /* ==============================================
+       基础重置样式 - 消除浏览器默认差异
+      ============================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: var(--dark-bg);
+      color: var(--text-light);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    img {
+      max-width: 100%;
+      display: block;
+    }
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+    }
+    
+    /* ==============================================
+       通用布局工具类 - 复用性样式
+       命名规则：c=container/f=flex/g=gap/m=margin/p=padding
+       r=radius/t=text/fs=font-size/fw=font-weight
+      ============================================== */
+    .c {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+    .f {
+      display: flex;
+    }
+    .fi {
+      align-items: center;
+    }
+    .fj {
+      justify-content: space-between;
+    }
+    /* 间距类 */
+    .g1 {gap:8px;}
+    .g2 {gap:12px;}
+    .g3 {gap:16px;}
+    .g4 {gap:24px;}
+    .m1 {margin-bottom:8px;}
+    .m2 {margin-bottom:12px;}
+    .m3 {margin-bottom:16px;}
+    .m4 {margin-bottom:24px;}
+    .m5 {margin-bottom:32px;}
+    .m6 {margin-top:40px;}
+    .p1 {padding:8px;}
+    .p2 {padding:12px;}
+    .p3 {padding:16px;}
+    .p4 {padding:20px;}
+    .p5 {padding:24px;}
+    /* 圆角类 */
+    .r1 {border-radius:4px;}
+    .r2 {border-radius:8px;}
+    .r3 {border-radius:12px;}
+    .r4 {border-radius:999px;}
+    /* 文本类 */
+    .tc {text-align:center;}
+    .fs1 {font-size:12px;}
+    .fs2 {font-size:14px;}
+    .fs3 {font-size:16px;}
+    .fs4 {font-size:20px;}
+    .fs5 {font-size:24px;}
+    .fw1 {font-weight:700;}
+    .fw2 {font-weight:500;}
+    /* 定位类 */
+    .re {position:relative;}
+    .ab {position:absolute;}
+    .in {top:0;left:0;right:0;bottom:0;}
+    /* 溢出类 */
+    .oh {overflow:hidden;}
+    .ox {overflow-x:auto;}
+    /* 层级类 */
+    .z1 {z-index:50;}
+    /* 显示类 */
+    .hd {display:none;}
+    .db {display:block;}
+    .fl1 {flex:1;}
+    .mw0 {min-width:0;}
+    .wn {white-space:nowrap;}
+    /* 文本截断 */
+    .lc2 {
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .tc2 {
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    
+    /* ==============================================
+       交互动画类 - 提升用户体验
+      ============================================== */
+    .hs {
+      transition:transform 0.2s;
+    }
+    .hs:hover {
+      transform:scale(1.03); /* 轻微放大效果 */
+    }
+    /* 滚动条样式 */
+    .st::-webkit-scrollbar {
+      width:4px;
+    }
+    .st::-webkit-scrollbar-thumb {
+      background:#444;
+      border-radius:2px;
+    }
+    /* 导航激活态 */
+    .na {
+      position:relative;
+    }
+    .na::after {
+      content:'';
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:100%;
+      height:3px;
+      background:var(--primary-color);
+    }
+    /* hover变色 */
+    .ch {
+      transition:color 0.3s ease;
+    }
+    .ch:hover {
+      color:var(--primary-color);
+    }
+    
+    /* ==============================================
+       头部导航样式
+      ============================================== */
+    header {
+      position:sticky; 
+      top:0; 
+      z-index:50; /* 固定在顶部 */
+      background:var(--dark-bg);
+      border-bottom:1px solid var(--light-gray);
+      height:64px;
+    }
+    /* Logo样式 - 金色文字阴影突出主题 */
+    .l {
+      color:var(--text-light);
+      font-size:24px;
+      font-weight:bold;
+      text-shadow: 0 0 5px var(--primary-color);
+    }
+    .mn {
+      margin-left:32px;
+    }
+    .mn a {
+      padding:0 16px;
+      height:64px;
+      display:flex;
+      align-items:center;
+      color:var(--text-gray);
+    }
+    .mn a.na {
+      color:var(--primary-color);
+    }
+    /* 搜索框样式 */
+    .sb {
+      background:var(--dark-gray);
+      padding:6px 16px;
+      border-radius:999px;
+      margin-right:16px;
+    }
+    .sb input {
+      background:transparent;
+      border:none;
+      outline:none;
+      color:var(--text-gray);
+      font-size:14px;
+      width:192px;
+      margin-left:8px;
+    }
+    .ua {
+      margin-right:16px;
+      color:var(--text-gray);
+    }
+    /* 用户头像 */
+    .av {
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      object-fit:cover;
+      border:2px solid transparent;
+      transition:border-color 0.3s ease;
+    }
+    .av:hover {
+      border-color:var(--primary-color);
+    }
+    
+    /* ==============================================
+       轮播图样式
+      ============================================== */
+    .ca {
+      position:relative;
+      border-radius:12px;
+      overflow:hidden;
+      margin-bottom:32px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+    .cc {
+      height:200px;
+    }
+    /* 响应式高度调整 */
+    @media (min-width:640px) {.cc {height:280px;}}
+    @media (min-width:768px) {.cc {height:350px;}}
+    .ci {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    /* 渐变遮罩 */
+    .co {
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,0.9),rgba(0,0,0,0.6),transparent);
+    }
+    .cn {
+      position:absolute;
+      bottom:0;
+      left:0;
+      padding:24px;
+      width:100%;
+    }
+    @media (min-width:768px) {.cn {width:66.666%;}}
+    /* 标签样式 */
+    .ct {
+      display:inline-block;
+      background:var(--secondary-color);
+      color:white;
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:4px;
+      margin-bottom:12px;
+    }
+    .ctt {
+      color:white;
+      font-size:20px;
+      font-weight:bold;
+      margin-bottom:8px;
+      text-shadow: 0 0 10px rgba(0,0,0,0.9);
+    }
+    @media (min-width:768px) {.ctt {font-size:32px;}}
+    .ctd {
+      color:rgba(255,255,255,0.9);
+      font-size:14px;
+      margin-bottom:16px;
+      display:-webkit-box;
+      -webkit-line-clamp:2; 
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    /* 按钮组 */
+    .cb {
+      display:flex;
+      align-items:center;
+      padding:8px 16px;
+      border-radius:8px;
+      font-size:14px;
+      transition:background-color 0.3s ease;
+    }
+    .cb1 {
+      background:var(--primary-color);
+      color:var(--dark-bg);
+      font-weight:bold;
+    }
+    .cb1:hover {
+      background:var(--text-light);
+    }
+    .cb2 {
+      background:rgba(255,255,255,0.1);
+      color:white;
+    }
+    .cb2:hover {
+      background:rgba(255,255,255,0.2);
+    }
+    /* 轮播切换按钮 */
+    .cc1 {
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      background:rgba(0,0,0,0.5);
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      transition:opacity 0.3s ease;
+    }
+    .ca:hover .cc1 {
+      opacity:1;
+    }
+    .ccl {left:12px;}
+    .ccr {right:12px;}
+    
+    /* ==============================================
+       专辑列表样式
+      ============================================== */
+    .st {
+      font-size:20px;
+      font-weight:bold;
+      margin-bottom:16px;
+      border-left: 4px solid var(--primary-color);
+      padding-left: 10px;
+    }
+    .sm {
+      color:var(--primary-color);
+      font-size:14px;
+    }
+    .sm:hover {
+      text-decoration:underline;
+    }
+    /* 网格布局 - 响应式列数 */
+    .ag {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+    @media (min-width:768px) {.ag {grid-template-columns:repeat(3,1fr);}}
+    @media (min-width:1024px) {.ag {grid-template-columns:repeat(4,1fr);}}
+    .ac {
+      transition:color 0.3s ease;
+    }
+    .ac:hover .at {
+      color:var(--primary-color);
+    }
+    .ap {
+      position:relative;
+      border-radius:8px;
+      overflow:hidden;
+      margin-bottom:8px;
+    }
+    /* 专辑封面 - 正方形比例 */
+    .ai {
+      width:100%;
+      aspect-ratio:1/1;
+      object-fit:cover;
+    }
+    /* 封面渐变遮罩 */
+    .ag2 {
+      position:absolute;
+      bottom:0;
+      left:0;
+      right:0;
+      height:33.333%;
+      background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);
+    }
+    /* 时长标签 */
+    .ad {
+      position:absolute;
+      bottom:8px;
+      right:8px;
+      background:rgba(0,0,0,0.7);
+      color:white;
+      font-size:12px;
+      padding:2px 6px;
+      border-radius:4px;
+    }
+    /* 新歌标签 */
+    .as {
+      position:absolute;
+      top:8px;
+      left:8px;
+      background:var(--primary-color);
+      color:white;
+      font-size:12px;
+      padding:2px 6px;
+      border-radius:4px;
+    }
+    .at {
+      font-size:14px;
+      font-weight:500;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      transition:color 0.3s ease;
+    }
+    .av2 {
+      display:flex;
+      align-items:center;
+      margin-top:4px;
+      color:var(--text-gray);
+      font-size:12px;
+    }
+    .av2 i {
+      margin-right:4px;
+    }
+    
+    /* ==============================================
+       新歌发布日历样式
+      ============================================== */
+    .sc {
+      background:var(--dark-gray);
+      border-radius:12px;
+      padding:16px;
+      margin-bottom:32px;
+    }
+    .wn {
+      display:flex;
+      border-bottom:1px solid var(--light-gray);
+      margin-bottom:16px;
+      overflow-x:auto;
+      padding-bottom:8px;
+    }
+    .wn button {
+      padding:8px 16px;
+      color:var(--text-gray);
+      white-space:nowrap;
+      transition:color 0.3s ease;
+    }
+    .wn button:hover {
+      color:var(--primary-color);
+    }
+    .wn button.a {
+      color:var(--primary-color);
+      font-weight:500;
+    }
+    .sl {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .si {
+      display:flex;
+      align-items:center;
+      padding:8px;
+      border-radius:8px;
+      transition:background-color 0.3s ease;
+    }
+    .si:hover {
+      background:var(--light-gray);
+    }
+    /* 时间标签 */
+    .st2 {
+      width:80px;
+      height:48px;
+      background:rgba(216,175,113,0.2);
+      color:var(--primary-color);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:8px;
+      font-weight:500;
+      margin-right:16px;
+    }
+    /* 歌曲封面 */
+    .si2 {
+      width:48px;
+      height:48px;
+      object-fit:cover;
+      border-radius:4px;
+      margin-right:12px;
+    }
+    .si3 {
+      flex:1;
+    }
+    .sn {
+      font-size:14px;
+      font-weight:500;
+    }
+    .se {
+      color:var(--text-gray);
+      font-size:12px;
+    }
+    .st3 {
+      font-size:12px;
+      padding:2px 8px;
+      border-radius:4px;
+    }
+    /* VIP标签 */
+    .st4 {
+      background:rgba(216,175,113,0.2);
+      color:var(--primary-color);
+    }
+    /* 免费标签 */
+    .st5 {
+      background:var(--light-gray);
+      color:var(--text-gray);
+    }
+    
+    /* ==============================================
+       演唱会/MV样式
+      ============================================== */
+    .mg {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+    @media (min-width:768px) {.mg {grid-template-columns:repeat(2,1fr);}}
+    .mc {
+      display:flex;
+      background:var(--dark-gray);
+      border-radius:8px;
+      overflow:hidden;
+      transition:all 0.3s ease;
+    }
+    .mc:hover {
+      box-shadow:0 0 15px rgba(216,175,113,0.1);
+    }
+    /* 视频封面 */
+    .mp {
+      width:33.333%;
+      aspect-ratio:16/9;
+      object-fit:cover;
+    }
+    .mi {
+      width:66.666%;
+      padding:12px;
+    }
+    /* 评分标签 */
+    .mr {
+      display:inline-block;
+      background:var(--primary-color);
+      color:var(--dark-bg);
+      font-weight:bold;
+      font-size:12px;
+      padding:2px 8px;
+      border-radius:4px;
+      margin-bottom:8px;
+    }
+    .mt {
+      font-size:16px;
+      font-weight:500;
+      margin-bottom:4px;
+      transition:color 0.3s ease;
+    }
+    .mc:hover .mt {
+      color:var(--primary-color);
+    }
+    .md {
+      color:var(--text-gray);
+      font-size:12px;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+      margin-bottom:8px;
+    }
+    .mm {
+      display:flex;
+      align-items:center;
+      color:var(--text-gray);
+      font-size:12px;
+    }
+    .mm span {
+      margin-right:12px;
+    }
+    .mm i {
+      margin-right:4px;
+    }
+    
+    /* ==============================================
+       侧边栏样式
+      ============================================== */
+    .sd {
+      width:100%;
+    }
+    @media (min-width:1024px) {
+      .mc2 {display:flex;gap:24px;}
+      .cl {width:75%;}
+      .sd {width:25%;}
+    }
+    /* 登录卡片 - 渐变背景 */
+    .lc {
+      background:linear-gradient(to bottom right,rgba(216,175,113,0.2),rgba(74,83,107,0.2));
+      border-radius:12px;
+      padding:20px;
+      text-align:center;
+      margin-bottom:24px;
+    }
+    .la {
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      object-fit:cover;
+      margin:0 auto 12px;
+      border:4px solid var(--dark-gray);
+    }
+    .lt {
+      color:var(--text-gray);
+      font-size:14px;
+      margin-bottom:12px;
+    }
+    .lb {
+      width:100%;
+      padding:8px 0;
+      border-radius:8px;
+      font-size:14px;
+      transition:background-color 0.3s ease;
+      margin-bottom:8px;
+    }
+    .lb1 {
+      background:var(--primary-color);
+      color:var(--dark-bg);
+      font-weight:bold;
+      border:none;
+    }
+    .lb1:hover {
+      background:rgba(216,175,113,0.9);
+    }
+    .lb2 {
+      background:var(--dark-gray);
+      border:1px solid var(--light-gray);
+      color:var(--text-gray);
+    }
+    .lb2:hover {
+      background:rgba(50,50,58,0.8);
+    }
+    
+    /* ==============================================
+       排行榜样式
+      ============================================== */
+    .rc {
+      background:var(--dark-gray);
+      border-radius:12px;
+      padding:20px;
+      margin-bottom:24px;
+    }
+    .rl {
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .ri {
+      display:flex;
+      align-items:center;
+    }
+    /* 排名数字 */
+    .rn {
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      color:var(--dark-bg);
+      font-weight:bold;
+      margin-right:12px;
+    }
+    .rn1 {background:var(--primary-color);}
+    .rn2 {background:rgba(216,175,113,0.8);}
+    .rn3 {background:rgba(216,175,113,0.6);}
+    .rn4 {background:var(--light-gray);color:var(--text-gray);}
+    /* 排行榜封面 */
+    .ri2 {
+      width:40px;
+      height:40px;
+      object-fit:cover;
+      border-radius:4px;
+      margin-right:12px;
+    }
+    .ri3 {
+      flex:1;
+      min-width:0;
+    }
+    .rt {
+      font-size:14px;
+      font-weight:500;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .rm {
+      color:var(--text-gray);
+      font-size:12px;
+    }
+    
+    /* ==============================================
+       会员广告样式
+      ============================================== */
+    .va {
+      background:linear-gradient(to right,var(--primary-color),var(--secondary-color));
+      border-radius:12px;
+      overflow:hidden;
+      margin-bottom:24px;
+    }
+    .vc {
+      padding:20px;
+      color:white;
+    }
+    .vt {
+      font-size:18px;
+      font-weight:bold;
+      margin-bottom:8px;
+    }
+    .vd {
+      font-size:14px;
+      opacity:0.9;
+      margin-bottom:16px;
+    }
+    .vb {
+      background:var(--dark-bg);
+      color:var(--primary-color);
+      font-size:14px;
+      padding:6px 16px;
+      border-radius:999px;
+      transition:background-color 0.3s ease;
+      border:none;
+      font-weight:bold;
+    }
+    .vb:hover {
+      background:var(--light-gray);
+    }
+    .vi {
+      width:100%;
+      height:128px;
+      object-fit:cover;
+      transition:transform 0.5s ease;
+    }
+    .va:hover .vi {
+      transform:scale(1.05);
+    }
+    
+    /* ==============================================
+       标签云样式
+      ============================================== */
+    .tc2 {
+      background:var(--dark-gray);
+      border-radius:12px;
+      padding:20px;
+    }
+    .ts {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .ti {
+      background:var(--light-gray);
+      color:var(--text-gray);
+      font-size:12px;
+      padding:4px 12px;
+      border-radius:999px;
+      transition:all 0.3s ease;
+    }
+    .ti:hover {
+      background:var(--primary-color);
+      color:var(--dark-bg);
+      font-weight:bold;
+    }
+    
+    /* ==============================================
+       页脚样式
+      ============================================== */
+    footer {
+      background:black;
+      color:var(--text-gray);
+      margin-top:40px;
+      padding:32px 0;
+    }
+    .fc {
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+      margin-bottom:24px;
+    }
+    @media (min-width:768px) {
+      .fc {flex-direction:row;justify-content:space-between;}
+    }
+    .fb {
+      margin-bottom:24px;
+    }
+    @media (min-width:768px) {
+      .fb {margin-bottom:0;max-width:300px;}
+    }
+    .fl {
+      color:var(--primary-color);
+      font-size:24px;
+      font-weight:bold;
+      margin-bottom:16px;
+    }
+    .fd {
+      font-size:14px;
+    }
+    .fl2 {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:32px;
+    }
+    @media (min-width:768px) {
+      .fl2 {grid-template-columns:repeat(3,1fr);}
+    }
+    .ft {
+      color:var(--text-light);
+      font-weight:bold;
+      margin-bottom:12px;
+    }
+    .fl3 {
+      list-style:none;
+    }
+    .fl3 li {
+      margin-bottom:8px;
+    }
+    .fl3 a {
+      font-size:14px;
+      transition:color 0.3s ease;
+    }
+    .fl3 a:hover {
+      color:var(--primary-color);
+    }
+    /* 社交图标 */
+    .sl2 {
+      display:flex;
+      gap:16px;
+      margin-bottom:16px;
+    }
+    .si4 {
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      background:var(--dark-gray);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:background-color 0.3s ease;
+    }
+    .si4:hover {
+      background:var(--primary-color);
+      color:var(--dark-bg);
+    }
+    .fc2 {
+      border-top:1px solid var(--dark-gray);
+      padding-top:24px;
+      text-align:center;
+      font-size:12px;
+    }
+    .ct2 {
+      margin-bottom:8px;
+    }
+    
+    /* ==============================================
+       回到顶部按钮
+      ============================================== */
+    #backToTop {
+      position:fixed;
+      bottom:24px;
+      right:24px;
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      background:var(--primary-color);
+      color:var(--dark-bg);
+      box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      visibility:hidden;
+      transition:all 0.3s ease;
+      border:none;
+      cursor:pointer;
+      font-weight:bold;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 头部导航 -->
+  <header>
+    <div class="c f fi fj">
+      <div class="f fi">
+        <a href="index.html" class="l">周杰伦音乐站</a>
+        
+        <!-- 主导航菜单 -->
+        <nav class="mn hd md:f">
+          <a href="index.html" class="na">首页</a>
+          <a href="albums.html" class="ch">数字专辑</a>
+          <a href="videos.html" class="ch">演唱会/MV</a>
+          <a href="lyrics.html" class="ch">歌词乐谱</a>
+          <a href="community.html" class="ch">粉丝社区</a>
+        </nav>
+      </div>
+      
+      <div class="f fi">
+        <!-- 搜索框 -->
+        <div class="sb hd md:f fi">
+          <i class="fa fa-search text-gray-500"></i>
+          <input type="text" placeholder="搜索歌曲、专辑、歌词...">
+        </div>
+        
+        <!-- 功能按钮 -->
+        <a href="share.html" class="ua hd md:f fi ch">
+          <i class="fa fa-share-alt mr-1"></i> 分享
+        </a>
+        
+        <button class="ua hd md:block ch">
+          <i class="fa fa-envelope-o"></i>
+        </button>
+        
+        <!-- 用户头像 -->
+        <img src="1.webp" alt="用户头像" class="av">
+        
+        <!-- 移动端菜单按钮 -->
+        <button class="md:hd ml-4 text-gray-400">
+          <i class="fa fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="c py-6">
+    <div class="mc2">
+      <!-- 左侧主要内容 -->
+      <div class="cl">
+        <!-- 轮播图区域 -->
+        <div class="ca" id="carousel">
+          <div class="cc">
+            <!-- 轮播图片列表 -->
+            <img src="1.webp" alt="周杰伦《范特西》专辑封面" class="ci carousel-item">
+            <img src="2.webp" alt="周杰伦《七里香》专辑封面" class="ci carousel-item hd">
+            <img src="3.webp" alt="周杰伦《最伟大的作品》专辑封面" class="ci carousel-item hd">
+            <div class="co"></div>
+            
+            <!-- 轮播文本内容 -->
+            <div class="cn carousel-text">
+              <span class="ct">经典回顾</span>
+              <h2 class="ctt">《范特西》：充满想象力的音乐奇迹</h2>
+              <p class="ctd hd sm:block">2001年的划时代专辑，融合了R&B、嘻哈、中国风等多种元素，奠定了周杰伦的音乐风格和地位...</p>
+              <div class="f g3">
+                <a href="播放.html" class="cb cb1">
+                  <i class="fa fa-headphones mr-2"></i> 立即播放
+                </a>
+                <a href="collection.html" class="cb cb2">
+                  <i class="fa fa-star-o mr-2"></i> 收藏专辑
+                </a>
+              </div>
+            </div>
+            <div class="cn carousel-text hd">
+              <span class="ct">经典永恒</span>
+              <h2 class="ctt">《七里香》：夏天的青春回忆</h2>
+              <p class="ctd hd sm:block">2004年发行的专辑，同名主打歌《七里香》成为一代人的青春符号，旋律一响满是夏天的味道...</p>
+              <div class="f g3">
+                <a href="播放.html" class="cb cb1">
+                  <i class="fa fa-headphones mr-2"></i> 立即播放
+                </a>
+                <a href="collection.html" class="cb cb2">
+                  <i class="fa fa-star-o mr-2"></i> 收藏专辑
+                </a>
+              </div>
+            </div>
+            <div class="cn carousel-text hd">
+              <span class="ct">新歌推荐</span>
+              <h2 class="ctt">《最伟大的作品》：穿越时空的音乐之旅</h2>
+              <p class="ctd hd sm:block">2022年发行的专辑，MV中周杰伦穿越时空与艺术家对话，钢琴旋律搭配复古曲风，创意拉满...</p>
+              <div class="f g3">
+                <a href="播放.html" class="cb cb1">
+                  <i class="fa fa-headphones mr-2"></i> 立即播放
+                </a>
+                <a href="collection.html" class="cb cb2">
+                  <i class="fa fa-star-o mr-2"></i> 收藏专辑
+                </a>
+              </div>
+            </div>
+            
+            <!-- 手动切换按钮 -->
+            <button class="cc1 ccl" id="prevBtn">
+              <i class="fa fa-angle-left"></i>
+            </button>
+            <button class="cc1 ccr" id="nextBtn">
+              <i class="fa fa-angle-right"></i>
+            </button>
+          </div>
+        </div>
+        
+        <!-- 热门数字专辑区域 -->
+        <section class="m5">
+          <div class="f fi fj m3">
+            <h2 class="st">热门数字专辑</h2>
+            <a href="albums-all.html" class="sm">查看全部专辑</a>
+          </div>
+          
+          <div class="ag">
+            <!-- 专辑1 -->
+            <div class="ac">
+              <div class="ap">
+                <img src="1.webp" alt="最伟大的作品 专辑封面" class="ai hs">
+                <div class="ag2"></div>
+                <span class="ad"><i class="fa fa-clock-o"></i> 42:18</span>
+                <span class="as">新歌推荐</span>
+              </div>
+              <h3 class="at">最伟大的作品</h3>
+              <div class="av2">
+                <i class="fa fa-music"></i>
+                <span>12首歌曲</span>
+              </div>
+            </div>
+            
+            <!-- 专辑2 -->
+            <div class="ac">
+              <div class="ap">
+                <img src="2.webp" alt="七里香 专辑封面" class="ai hs">
+                <div class="ag2"></div>
+                <span class="ad"><i class="fa fa-clock-o"></i> 38:50</span>
+                <span class="as">经典永恒</span>
+              </div>
+              <h3 class="at">七里香</h3>
+              <div class="av2">
+                <i class="fa fa-music"></i>
+                <span>10首歌曲</span>
+              </div>
+            </div>
+            
+            <!-- 专辑3 -->
+            <div class="ac">
+              <div class="ap">
+                <img src="3.webp" alt="十一月的萧邦 专辑封面" class="ai hs">
+                <div class="ag2"></div>
+                <span class="ad"><i class="fa fa-clock-o"></i> 45:30</span>
+                <span class="as">独家收录</span>
+              </div>
+              <h3 class="at">十一月的萧邦</h3>
+              <div class="av2">
+                <i class="fa fa-music"></i>
+                <span>12首歌曲</span>
+              </div>
+            </div>
+            
+            <!-- 专辑4 -->
+            <div class="ac">
+              <div class="ap">
+                <img src="4.webp" alt="叶惠美 专辑封面" class="ai hs">
+                <div class="ag2"></div>
+                <span class="ad"><i class="fa fa-clock-o"></i> 41:20</span>
+                <span class="as">超人气</span>
+              </div>
+              <h3 class="at">叶惠美</h3>
+              <div class="av2">
+                <i class="fa fa-music"></i>
+                <span>11首歌曲</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- 新歌发布日历 -->
+        <section class="sc">
+          <h2 class="st m3">新歌发布日历</h2>
+          
+          <div class="wn st">
+            <button class="a">本周</button>
+            <button class="ch">下周</button>
+            <button class="ch">周一</button>
+            <button class="ch">周二</button>
+            <button class="ch">周三</button>
+            <button class="ch">周四</button>
+            <button class="ch">周五</button>
+            <button class="ch">周六</button>
+            <button class="ch">周日</button>
+          </div>
+          
+          <div class="sl">
+            <!-- 歌曲1 -->
+            <div class="si">
+              <div class="st2">
+                <span>12/10</span>
+              </div>
+              <img src="1.webp" alt="等你下课 歌曲封面" class="si2">
+              <div class="si3">
+                <h3 class="sn">等你下课 (feat. 杨瑞代)</h3>
+                <p class="se">收录于《周杰伦的床边故事》</p>
+              </div>
+              <span class="st3 st4">VIP抢先听</span>
+            </div>
+            
+            <!-- 歌曲2 -->
+            <div class="si">
+              <div class="st2">
+                <span>18:30</span>
+              </div>
+              <img src="2.webp" alt="告白气球 歌曲封面" class="si2">
+              <div class="si3">
+                <h3 class="sn">告白气球</h3>
+                <p class="se">《告白气球》单曲发布</p>
+              </div>
+              <span class="st3 st5">免费收听</span>
+            </div>
+            
+            <!-- 歌曲3 -->
+            <div class="si">
+              <div class="st2">
+                <span>21:00</span>
+              </div>
+              <img src="3.webp" alt="青花瓷 歌曲封面" class="si2">
+              <div class="si3">
+                <h3 class="sn">青花瓷</h3>
+                <p class="se">经典重制高清版MV</p>
+              </div>
+              <span class="st3 st4">VIP专属</span>
+            </div>
+          </div>
+        </section>
+        
+        <!-- 精选演唱会/MV -->
+        <section>
+          <div class="f fi fj m3">
+            <h2 class="st">精选演唱会/MV</h2>
+            <a href="videos-all.html" class="sm">更多视频</a>
+          </div>
+          
+          <div class="mg">
+            <!-- 视频1 -->
+            <div class="mc">
+              <img src="1.webp" alt="地表最强演唱会 上海站" class="mp hs">
+              <div class="mi">
+                <span class="mr">10.0分</span>
+                <h3 class="mt">地表最强演唱会：上海站</h3>
+                <p class="md">周杰伦“地表最强”世界巡回演唱会，燃爆上海八万人体育场，收录了多首经典曲目...</p>
+                <div class="mm">
+                  <span><i class="fa fa-calendar"></i> 2017-09-30</span>
+                  <span><i class="fa fa-video-camera"></i> 145分钟</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 视频2 -->
+            <div class="mc">
+              <img src="2.webp" alt="Mojito MV" class="mp hs">
+              <div class="mi">
+                <span class="mr">9.8分</span>
+                <h3 class="mt">《Mojito》异域风情MV</h3>
+                <p class="md">在古巴拍摄，融合了拉丁音乐元素的清新浪漫之作，带你感受热情的异域风情...</p>
+                <div class="mm">
+                  <span><i class="fa fa-calendar"></i> 2020-06-12</span>
+                  <span><i class="fa fa-video-camera"></i> 3分钟 54秒</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      
+      <!-- 右侧边栏 -->
+      <aside class="sd">
+        <!-- 登录卡片 -->
+        <div class="lc">
+          <img src="9.jpg" alt="周杰伦头像" class="la">
+          <p class="lt">登录即可创建您的专属歌单</p>
+          <a class="lb lb1" href="登录.html" style="display: block; margin-bottom: 8px;">登录</a>
+          <a class="lb lb2" href="登录.html" style="display: block;">注册</a>
+        </div>
+        
+        <!-- 歌曲热播榜 -->
+        <div class="rc">
+          <h3 class="st m3">歌曲热播榜</h3>
+          
+          <div class="rl">
+            <!-- 排名1 -->
+             /
+            <div class="ri">
+              <div class="rn rn1">1</div>
+              <img src="1.webp" alt="晴天 歌曲封面" class="ri2">
+              <div class="ri3">
+                <h4 class="rt">晴天</h4>
+                <p class="rm"><i class="fa fa-fire"></i> 9.9分 · 582.5万次收听</p>
+              </div>
+            </div>
+            
+            <!-- 排名2 -->
+            <div class="ri">
+              <div class="rn rn2">2</div>
+              <img src="4.webp" alt="夜曲 歌曲封面" class="ri2">
+              <div class="ri3">
+                <h4 class="rt">夜曲</h4>
+                <p class="rm"><i class="fa fa-fire"></i> 9.7分 · 459.2万次收听</p>
+              </div>
+            </div>
+            
+            <!-- 排名3 -->
+            <div class="ri">
+              <div class="rn rn3">3</div>
+              <img src="5.webp" alt="本草纲目 歌曲封面" class="ri2">
+              <div class="ri3">
+                <h4 class="rt">本草纲目</h4>
+                <p class="rm"><i class="fa fa-fire"></i> 9.6分 · 386.8万次收听</p>
+              </div>
+            </div>
+            
+            <!-- 排名4 -->
+            <div class="ri">
+              <div class="rn rn4">4</div>
+              <img src="6.webp" alt="稻香 歌曲封面" class="ri2">
+              <div class="ri3">
+                <h4 class="rt">稻香</h4>
+                <p class="rm"><i class="fa fa-fire"></i> 9.5分 · 298.5万次收听</p>
+              </div>
+            </div>
+            
+            <!-- 排名5 -->
+            <div class="ri">
+              <div class="rn rn4">5</div>
+              <img src="7.webp" alt="听妈妈的话 歌曲封面" class="ri2">
+              <div class="ri3">
+                <h4 class="rt">听妈妈的话</h4>
+                <p class="rm"><i class="fa fa-fire"></i> 9.4分 · 276.3万次收听</p>
+              </div>
+            </div>
+          </div>
+          
+          <a href="ranking.html" class="sm db tc m3">查看完整排行榜</a>
+        </div>
+        
+        <!-- 会员广告 -->
+        <div class="va">
+          <div class="vc">
+            <h3 class="vt">开通黑胶VIP</h3>
+            <p class="vd">享无损音质、演唱会超清直播、歌词滚动</p>
+            <a href="vip.html">
+              <button class="vb">立即开通</button>
+            </a>
+          </div>
+          <img src="11.jpg" alt="会员福利" class="vi">
+        </div>
+        
+        <!-- 热门曲风标签 -->
+        <div class="tc2">
+          <h3 class="st m3">热门曲风标签</h3>
+          <div class="ts">
+        
+            <a  class="ti"># 校园怀旧</a>
+            <a class="ti"># 摇滚</a>
+            <a  class="ti"># 爵士</a>
+            <a  class="ti"># 经典</a>
+            <a  class="ti"># 情歌</a>
+            <a class="ti"># 说唱</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer>
+    <div class="c">
+      <div class="fc">
+        <div class="fb">
+          <h3 class="fl">周杰伦音乐站</h3>
+          <p class="fd">一个专注于汇集周杰伦全系音乐作品、MV和演唱会视频的非官方粉丝网站，致力于传承J式音乐的魅力。</p>
+        </div>
+        
+        <div class="fl2">
+          <!-- 内容分类 -->
+          <div>
+            <h4 class="ft">内容分类</h4>
+            <ul class="fl3">
+              <li><a href="albums.html" class="ch">数字专辑</a></li>
+              <li><a href="songs.html" class="ch">单曲合集</a></li>
+              <li><a href="videos.html" class="ch">演唱会视频</a></li>
+              <li><a href="interview.html" class="ch">独家采访</a></li>
+            </ul>
+          </div>
+          
+          <!-- 粉丝服务 -->
+          <div>
+            <h4 class="ft">粉丝服务</h4>
+            <ul class="fl3">
+              <li><a href="agreement.html" class="ch">用户协议</a></li>
+              <li><a href="privacy.html" class="ch">隐私保护</a></li>
+              <li><a href="vip.html" class="ch">VIP服务</a></li>
+              <li><a href="contact.html" class="ch">联系站长</a></li>
+            </ul>
+          </div>
+          
+          <!-- 关注杰伦 -->
+          <div>
+            <h4 class="ft">关注杰伦</h4>
+            <div class="sl2">
+              <a href="https://weibo.com/jaychou" class="si4">
+                <i class="fa fa-weibo"></i>
+              </a>
+              <a href="https://instagram.com/jaychou" class="si4">
+                <i class="fa fa-instagram"></i>
+              </a>
+              <a href="https://facebook.com/jaychou" class="si4">
+                <i class="fa fa-facebook"></i>
+              </a>
+            </div>
+            <p class="fs2"></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="fc2">
+        <p class="ct2">李文龙 25216950128</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 回到顶部按钮 -->
+  <button id="backToTop">
+    <i class="fa fa-chevron-up"></i>
+  </button>
+
+  <script>
+    // ==============================================
+    // 轮播图自动跳转功能实现
+    // ==============================================
+    // 1. 获取轮播相关DOM元素
+    const carousel = document.getElementById('carousel');
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    const carouselTexts = document.querySelectorAll('.carousel-text');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // 2. 轮播配置参数
+    let currentIndex = 0;
+    const autoPlayInterval = 5000; // 5秒自动切换
+    let autoPlayTimer;
+
+    // 3. 核心函数：切换轮播图
+    function switchCarousel(index) {
+      // 隐藏所有图片和文本
+      carouselItems.forEach(item => item.classList.add('hd'));
+      carouselTexts.forEach(text => text.classList.add('hd'));
+      // 显示当前索引对应的内容
+      carouselItems[index].classList.remove('hd');
+      carouselTexts[index].classList.remove('hd');
+      // 更新当前索引
+      currentIndex = index;
+    }
+
+    // 4. 自动轮播函数
+    function startAutoPlay() {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = setInterval(() => {
+        let nextIndex = (currentIndex + 1) % carouselItems.length;
+        switchCarousel(nextIndex);
+      }, autoPlayInterval);
+    }
+
+    // 5. 手动切换逻辑
+    prevBtn.addEventListener('click', () => {
+      let prevIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
+      switchCarousel(prevIndex);
+      startAutoPlay(); // 重启自动轮播
+    });
+
+    nextBtn.addEventListener('click', () => {
+      let nextIndex = (currentIndex + 1) % carouselItems.length;
+      switchCarousel(nextIndex);
+      startAutoPlay(); // 重启自动轮播
+    });
+
+    // 6. 鼠标悬停暂停，离开恢复
+    carousel.addEventListener('mouseenter', () => {
+      clearInterval(autoPlayTimer);
+    });
+    carousel.addEventListener('mouseleave', () => {
+      startAutoPlay();
+    });
+
+    // 7. 页面加载完成后启动自动轮播
+    window.addEventListener('load', () => {
+      startAutoPlay();
+    });
+
+    // ==============================================
+    // 回到顶部功能
+    // ==============================================
+    const backToTopBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backToTopBtn.style.opacity = '1';
+        backToTopBtn.style.visibility = 'visible';
+      } else {
+        backToTopBtn.style.opacity = '0';
+        backToTopBtn.style.visibility = 'hidden';
+      }
+    });
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
+</body>
+</html>

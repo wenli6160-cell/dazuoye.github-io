@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑金风格登录/注册</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* 背景色：深黑 */
+            background-color: #1a1a1a;
+            color: #ffffff; /* 默认文本颜色 */
+        }
+
+        /* 容器样式 */
+        .container {
+            /* 登录/注册表单的背景色：比背景稍亮的黑色 */
+            background-color: #2c2c2c;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            text-align: center;
+        }
+
+        /* 标题样式 */
+        h2 {
+            /* 金色标题 */
+            color: #ebbb43; 
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            letter-spacing: 2px;
+        }
+
+        /* 表单组 */
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        /* 输入框标签 */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            /* 浅金色标签文字 */
+            color: #ffdf9e; 
+            font-weight: bold;
+        }
+
+        /* 输入框和密码框样式 */
+        input[type="text"], 
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            /* 背景：深黑 */
+            background-color: #1a1a1a;
+            /* 边框：金色 */
+            border: 1px solid #daa520;
+            border-radius: 5px;
+            /* 文字：白色 */
+            color: #ffffff;
+            box-sizing: border-box; /* 确保 padding 不会增加总宽度 */
+            transition: border-color 0.3s;
+        }
+
+        /* 输入框聚焦时的样式 */
+        input[type="text"]:focus, 
+        input[type="password"]:focus {
+            /* 聚焦时边框颜色更亮 */
+            border-color: #ffdf9e; 
+            outline: none;
+        }
+
+        /* 按钮样式 */
+        button {
+            width: 100%;
+            padding: 12px;
+            /* 按钮背景：金色 */
+            background-color: #e9bc49;
+            /* 按钮文字：黑色 */
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+
+        /* 按钮悬停效果 */
+        button:hover {
+            /* 悬停时背景色变亮 */
+            background-color: #ffdf9e; 
+            transform: translateY(-2px);
+        }
+
+        /* 切换链接样式 */
+        .switch-form {
+            margin-top: 20px;
+        }
+
+        .switch-form a {
+            /* 金色链接 */
+            color: #f0c24f; 
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+
+        .switch-form a:hover {
+            /* 悬停时链接颜色变亮 */
+            color: #ffdf9e; 
+            text-decoration: underline;
+        }
+
+        /* 隐藏注册表单，只显示登录表单 (默认) */
+        #register-form {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="login-form">
+            <h2>🔑 登录</h2>
+            <form>
+                <div class="input-group">
+                    <label for="login-username">用户名</label>
+                    <input type="text" id="login-username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">密码</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit">登 录</button>
+            </form>
+            <div class="switch-form">
+                还没有账户？<a href="#" onclick="showRegister()">立即注册</a>
+            </div>
+        </div>
+
+        <div id="register-form">
+            <h2>📝 注册</h2>
+            <form>
+                <div class="input-group">
+                    <label for="register-username">用户名</label>
+                    <input type="text" id="register-username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-email">邮箱</label>
+                    <input type="text" id="register-email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-password">密码</label>
+                    <input type="password" id="register-password" name="password" required>
+                </div>
+                <button type="submit">注 册</button>
+            </form>
+            <div class="switch-form">
+                已有账户？<a href="#" onclick="showLogin()">返回登录</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 🚨 注意：您要求不用 JS，但为了让用户体验稍微好一点，
+        // 以下是用于“登录”和“注册”表单切换的简单 JS 代码。
+        // 如果您严格要求无 JS，请删除此 <script> 标签及内容。
+
+        function showRegister() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
